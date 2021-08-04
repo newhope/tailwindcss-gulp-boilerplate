@@ -1,0 +1,41 @@
+{
+  "name": "tailwindcss-gulp-boilerplate",
+  "version": "1.0.0",
+  "description": "Tailwind CSS boilerplate",
+  "main": "index.html",
+  "scripts": {
+    "build-production": "NODE_ENV=production gulp",
+    "buld": "gulp",
+    "dev": "gulp dev",
+    "vendor": "gulp vendor",
+    "watch": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salttechno/tailwindcss-boilerplate.git"
+  },
+  "keywords": [
+    "tailwindcss",
+    "boilerplate",
+    "gulp",
+    "postcss",
+    "imagemin"
+  ],
+  "author": "DQM",
+  "license": "MIT",
+  "devDependencies": {
+    "autoprefixer": "^10.3.1",
+    "cssnano": "^5.0.7",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-filter": "^7.0.0",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-uglify": "^3.0.2",
+    "postcss": "^8.3.6",
+    "postcss-import": "^14.0.2",
+    "tailwindcss": "^2.2.7"
+  }
+}
