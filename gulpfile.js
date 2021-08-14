@@ -1,6 +1,6 @@
 const { watch, series, src, dest } = require("gulp");
 var postcss = require("gulp-postcss");
-const imagemin = require("gulp-imagemin");
+const tinypng = require('gulp-tinypng-compress');
 let concat = require("gulp-concat");
 let uglify = require('gulp-uglify');
 let plumber = require('gulp-plumber');
@@ -81,11 +81,27 @@ function jsMergeTask(cb) {
 
 
 // Task for minifying images
-function imageminTask(cb) {
+function tinypngTask(cb) {
 
+	let tinypng_api_key = process.env.TINYPNG_API_KEY;
+	if ( ! tinypng_api_key) {
+		throw 'No TINYPNG_API_KEY found in the environment';
+	}
+
+	tinypng_api_key = tinypng_api_key.split(',');
+	tinypng_api_key.map(item => item.trim()); // trim white space
+
+	let random_key = tinypng_api_key.length === 1 ? 0 : Math.floor(Math.random()*tinypng_api_key.length);
+	console.log('Found ' + tinypng_api_key.length + ' key(s)');
+	console.log('Randomized Tinypng api key', random_key, tinypng_api_key[random_key]);
+	
 	return src(imgFiles)
-		.pipe(imagemin())
-		.pipe(dest(outputImgDir));
+		.pipe(tinypng({
+			key: tinypng_api_key[random_key],
+			sigFile: baseInputDir + '/.tinypng-sigs',
+			log: true
+		}))
+		.pipe(dest(outputImgDir));	
 }
 
 function fontTask(cb) {
@@ -125,10 +141,10 @@ function watchTask(cb) {
 }
 
 
-exports.default = series(cssTask, jsSATask, jsMergeTask, imageminTask, fontTask, jsVendorTask, cssVendorTask);
-exports.dev = series(cssTask, jsSATask, jsMergeTask, imageminTask, fontTask, jsVendorTask, cssVendorTask, watchTask);
+exports.default = series(cssTask, jsSATask, jsMergeTask, tinypngTask, fontTask, jsVendorTask, cssVendorTask);
+exports.dev = series(cssTask, jsSATask, jsMergeTask, tinypngTask, fontTask, jsVendorTask, cssVendorTask, watchTask);
 exports.css = cssTask;
-exports.image = imageminTask;
+exports.image = tinypngTask;
 exports.font = fontTask;
 exports.js = series(jsSATask, jsMergeTask);
 exports.vendor = series(jsVendorTask, cssVendorTask);
